@@ -18,10 +18,11 @@ try:
             if i == 10:
                 break
         print(f"File size: {size}")
-        for i, k in elements.items():
+        sortlist = sorted(elements.items(), key= lambda x: x[0])
+        for i, k in sortlist:
             print(f"{i}: {k}")
         status.clear()
 except KeyboardInterrupt:
     print(f"File size: : {size}")
-    for i, k in elements.items():
+    for i, k in sortlist:
         print(f"{i}: {k}")
