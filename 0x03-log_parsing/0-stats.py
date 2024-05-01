@@ -1,6 +1,8 @@
 #!/usr/bin/python3
+"""  reads stdin line by line and computes metrics """
 import sys
 from collections import Counter
+
 
 status = []
 elements = {}
@@ -18,7 +20,7 @@ try:
             if i == 10:
                 break
         print(f"File size: {size}")
-        sortlist = sorted(elements.items(), key= lambda x: x[0])
+        sortlist = sorted(elements.items(), key=lambda x: x[0])
         for i, k in sortlist:
             print(f"{i}: {k}")
         status.clear()
