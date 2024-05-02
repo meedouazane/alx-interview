@@ -8,8 +8,8 @@ from collections import Counter
 def parse_line(line):
     """ Parses a line and returns IP, status code, and file size """
     parts = line.split()
-    if len(parts) != 9 or parts[4] != "\"GET" or
-    parts[5] != "/projects/260" or parts[6] != "HTTP/1.1\"":
+    if (len(parts) != 9 or parts[4] != "\"GET" or
+            parts[5] != "/projects/260" or parts[6] != "HTTP/1.1\""):
         return None, None, None
     ip = parts[0]
     status_code = parts[7]
