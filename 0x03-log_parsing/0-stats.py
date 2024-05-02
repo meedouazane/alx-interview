@@ -1,54 +1,79 @@
 #!/usr/bin/python3
-""" Reads stdin line by line and computes metrics """
-
+"""  reads stdin line by line and computes metrics """
 import sys
 from collections import Counter
+from datetime import datetime
 
 
-def parse_line(line):
-    """ Parses a line and returns IP, status code, and file size """
-    parts = line.split()
-    if (len(parts) != 9 or parts[4] != "\"GET" or
-            parts[5] != "/projects/260" or parts[6] != "HTTP/1.1\""):
-        return None, None, None
-    ip = parts[0]
-    status_code = parts[7]
+def validate_ip(ip):
+    """ verify if ip address is valid"""
+    a = ip.split('.')
+    if len(a) != 4:
+        return False
+    for x in a:
+        if not x.isdigit():
+            return False
+        i = int(x)
+        if i < 0 or i > 255:
+            return False
+    return True
+
+
+def validate_date(Year, time):
+    """ Verifying if date is valid"""
+    date_y = str(Year)
+    date_t = str(time)
+    time_clean = date_t.replace(']', '')
+    year_clean = date_y.replace('[', '')
     try:
-        status_code = int(status_code)
+        datetime.strptime(time_clean, '%H:%M:%S.%f')
+        datetime.strptime(year_clean, '%Y-%m-%d')
     except ValueError:
-        return None, None, None
-    if status_code not in {200, 301, 400, 401, 403, 404, 405, 500}:
-        return None, None, None
-    file_size = int(parts[8])
-    return ip, status_code, file_size
+        return False
 
 
-def print_metrics(total_size, status_counts):
-    """ Prints the computed metrics """
-    print(f"Total file size: {total_size}")
-    for status_code in sorted(status_counts.keys()):
-        print(f"{status_code}: {status_counts[status_code]}")
-
-
-def main():
-    status_counts = Counter()
-    total_size = 0
-    line_count = 0
-
+def verify_format(Line):
+    """ format must be <IP Address> -
+    [<date>] "GET /projects/260 HTTP/1.1"
+    <status code> <file size>
+    """
+    valid_status = [200, 301, 400, 401, 403, 404, 405, 500]
     try:
-        for line in sys.stdin:
-            ip, status_code, file_size = parse_line(line.strip())
-            if ip is None:
-                continue
-            total_size += file_size
-            status_counts[status_code] += 1
-            line_count += 1
-            if line_count % 10 == 0:
-                print_metrics(total_size, status_counts)
-                status_counts.clear()
-    except KeyboardInterrupt:
-        print_metrics(total_size, status_counts)
+        int(Line[8])
+        int(Line[7])
+    except ValueError:
+        return False
+    if (validate_ip(Line[0]) is False or
+            len(Line) != 9 or Line[5] != "/projects/260" or
+            Line[1] != "-" or Line[4] != "\"GET" or
+            validate_date(Line[2], Line[3]) is False or
+            int(Line[7]) not in valid_status or
+            Line[6] != "HTTP/1.1\""):
+        return False
+    return True
 
+
+status = []
+elements = {}
+sortlist = []
+size = 0
 
 if __name__ == "__main__":
-    main()
+    try:
+        for line in sys.stdin:
+            data = line.rstrip()
+            parts = data.split()
+            if verify_format(parts):
+                status.append(parts[7])
+                elements = Counter(status)
+                size += int(parts[8])
+            if len(status) == 10:
+                print(f"File size: {size}")
+                sortlist = sorted(elements.items(), key=lambda x: x[0])
+                for i, k in sortlist:
+                    print(f"{i}: {k}")
+                status.clear()
+    except KeyboardInterrupt:
+        print(f"File size: : {size}")
+        for i, k in sortlist:
+            print(f"{i}: {k}")
