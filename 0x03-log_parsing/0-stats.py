@@ -77,3 +77,4 @@ if __name__ == "__main__":
         print(f"File size: {size}")
         for code, count in sorted(elements.items()):
             print(f"{code}: {count}")
+        raise
