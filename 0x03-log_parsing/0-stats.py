@@ -26,7 +26,8 @@ def verify_format(Line):
     valid_status = [200, 301, 400, 401, 403, 404, 405, 500]
     if (validate_ip(Line[0]) is False or
             len(Line) != 9 or Line[5] != "/projects/260" or
-            Line[1] != "-" or Line[4] != "\"GET" or Line[7] not in valid_status or
+            Line[1] != "-" or Line[4] != "\"GET" or
+            Line[7] not in valid_status or
             Line[6] != "HTTP/1.1\""):
         return False
     try:
