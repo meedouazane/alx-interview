@@ -3,6 +3,33 @@
 import sys
 from collections import Counter
 
+
+def validate_ip(ip):
+    """ verify if ip address is valid"""
+    a = ip.split('.')
+    if len(a) != 4:
+        return False
+    for x in a:
+        if not x.isdigit():
+            return False
+        i = int(x)
+        if i < 0 or i > 255:
+            return False
+    return True
+
+
+def verify_format(Line):
+    """ format must be <IP Address> -
+    [<date>] "GET /projects/260 HTTP/1.1"
+    <status code> <file size>
+    """
+    if (validate_ip(Line[0]) is False or
+            len(Line) != 9 or Line[5] != "/projects/260" or
+            Line[1] != "-" or Line[4] != "\"GET" or Line[6] != "HTTP/1.1\""):
+        return False
+    return True
+
+
 status = []
 elements = {}
 sortlist = []
@@ -13,9 +40,10 @@ if __name__ == "__main__":
         for line in sys.stdin:
             data = line.rstrip()
             parts = data.split()
-            status.append(parts[7])
-            elements = Counter(status)
-            size += int(parts[8])
+            if verify_format(parts):
+                status.append(parts[7])
+                elements = Counter(status)
+                size += int(parts[8])
             if len(status) == 10:
                 print(f"File size: {size}")
                 sortlist = sorted(elements.items(), key=lambda x: x[0])
