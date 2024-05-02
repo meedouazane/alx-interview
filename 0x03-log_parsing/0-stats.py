@@ -53,31 +53,27 @@ def verify_format(Line):
     return True
 
 
-def main():
-    """ the main function """
+if __name__ == "__main__":
     status = []
-    elements = {}
-    sortlist = []
+    elements = Counter()
     size = 0
+    c = 0
     try:
         for line in sys.stdin:
+            c += 1
             data = line.rstrip()
             parts = data.split()
             if verify_format(parts):
                 status.append(parts[7])
-                elements = Counter(status)
+                elements.update([parts[7]])
                 size += int(parts[8])
-            if len(status) == 10:
+            if c % 10 == 0:
                 print(f"File size: {size}")
-                sortlist = sorted(elements.items(), key=lambda x: x[0])
-                for i, k in sortlist:
-                    print(f"{i}: {k}")
+                for code, count in sorted(elements.items()):
+                    print(f"{code}: {count}")
+            if c % 10 == 0 or line.strip() == "":
                 status.clear()
-    except KeyboardInterrupt:
-        print(f"File size: : {size}")
-        for i, k in sortlist:
-            print(f"{i}: {k}")
-            raise
-
-if __name__ == "__main__":
-    main()
+    except KeyboardInterrupt as err:
+        print(f"File size: {size}")
+        for code, count in sorted(elements.items()):
+            print(f"{code}: {count}")
