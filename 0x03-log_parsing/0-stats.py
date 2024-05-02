@@ -77,7 +77,7 @@ def main():
         print(f"File size: : {size}")
         for i, k in sortlist:
             print(f"{i}: {k}")
-
+            raise
 
 if __name__ == "__main__":
     main()
