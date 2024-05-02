@@ -53,12 +53,12 @@ def verify_format(Line):
     return True
 
 
-status = []
-elements = {}
-sortlist = []
-size = 0
-
-if __name__ == "__main__":
+def main():
+    """ the main function """
+    status = []
+    elements = {}
+    sortlist = []
+    size = 0
     try:
         for line in sys.stdin:
             data = line.rstrip()
@@ -77,3 +77,7 @@ if __name__ == "__main__":
         print(f"File size: : {size}")
         for i, k in sortlist:
             print(f"{i}: {k}")
+
+
+if __name__ == "__main__":
+    main()
