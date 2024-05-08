@@ -8,10 +8,6 @@ def validUTF8(data):
     :param data: data set (can contain multiple characters)
     :return: True if data is a valid UTF-8 encoding, else return False
     """
-    for i in data:
-        if i > 255 or i < 0:
-            return False
-
     for i in range(len(data)):
         if data[i] & 0b10000000 == 0:
             return False
