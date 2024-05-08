@@ -9,8 +9,6 @@ def validUTF8(data):
     :return: True if data is a valid UTF-8 encoding, else return False
     """
     for i in range(len(data)):
-        if data[i] & 0b10000000 == 0:
-            return False
         if data[i] & 0b11000000 == 0b11000000:
             if not ((data[i + 1]) & 0b11000000 == 0b10000000
                     and (data[i + 2]) & 0b11000000 == 0b10000000):
