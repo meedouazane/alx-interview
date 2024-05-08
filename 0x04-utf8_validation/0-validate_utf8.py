@@ -11,4 +11,26 @@ def validUTF8(data):
     for i in data:
         if i > 255 or i < 0:
             return False
+
+    for i in range(len(data)):
+        if data[i] & 0b10000000 == 0:
+            return False
+        if data[i] & 0b11000000 == 0b11000000:
+            if not ((data[i + 1]) & 0b11000000 == 0b10000000
+                    and (data[i + 2]) & 0b11000000 == 0b10000000):
+                return False
+            i += 2
+        if (data[i]) & 0b11100000 == 0b11100000:
+            if not ((data[i + 1]) & 0b11000000 == 0b10000000 and
+                    (data[i + 2]) & 0b11000000 == 0b10000000 and
+                    (data[i + 3]) & 0b11000000 == 0b10000000):
+                return False
+            i += 3
+        if data[i] & 0b11110000 == 0b11110000:
+            if not (data[i + 1] & 0b11000000 == 0b10000000 and
+                    data[i + 2] & 0b11000000 == 0b10000000 and
+                    data[i + 3] & 0b11000000 == 0b10000000 and
+                    data[i + 4] & 0b11000000 == 0b10000000):
+                return False
+            i += 4
     return True
