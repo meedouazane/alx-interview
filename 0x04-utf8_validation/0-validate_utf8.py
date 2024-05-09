@@ -10,27 +10,27 @@ def validUTF8(data):
     """
     i = 0
     while i < len(data):
-        try:
-            if data[i] & 0b11000000 == 0b11000000:
-                if not ((data[i + 1]) & 0b11000000 == 0b10000000
-                        and (data[i + 2]) & 0b11000000 == 0b10000000):
-                    return False
-                i += 2
-            elif (data[i]) & 0b11100000 == 0b11100000:
-                if not ((data[i + 1]) & 0b11000000 == 0b10000000 and
-                        (data[i + 2]) & 0b11000000 == 0b10000000 and
-                        (data[i + 3]) & 0b11000000 == 0b10000000):
-                    return False
-                i += 3
-            elif data[i] & 0b11110000 == 0b11110000:
-                if not (data[i + 1] & 0b11000000 == 0b10000000 and
-                        data[i + 2] & 0b11000000 == 0b10000000 and
-                        data[i + 3] & 0b11000000 == 0b10000000 and
-                        data[i + 4] & 0b11000000 == 0b10000000):
-                    return False
-                i += 4
-            else:
-                i += 1
-        except IndexError:
-            return False
+        if data[i] & 0b11000000 == 0b11000000:
+            if len(data) < i + 2 or not (
+                    data[i + 1] & 0b11000000 == 0b10000000
+                    and data[i + 2] & 0b11000000 == 0b10000000):
+                return False
+            i += 2
+        elif data[i] & 0b11100000 == 0b11100000 and len(data) < i + 3:
+            if len(data) < i + 3 or not (
+                    data[i + 1] & 0b11000000 == 0b10000000 and
+                    data[i + 2] & 0b11000000 == 0b10000000 and
+                    data[i + 3] & 0b11000000 == 0b10000000):
+                return False
+            i += 3
+        elif data[i] & 0b11110000 == 0b11110000 and len(data) < i + 4:
+            if len(data) < i + 4 or not (
+                    data[i + 1] & 0b11000000 == 0b10000000 and
+                    data[i + 2] & 0b11000000 == 0b10000000 and
+                    data[i + 3] & 0b11000000 == 0b10000000 and
+                    data[i + 4] & 0b11000000 == 0b10000000):
+                return False
+            i += 4
+        else:
+            i += 1
     return True
