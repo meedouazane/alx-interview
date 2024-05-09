@@ -8,8 +8,6 @@ def validUTF8(data):
     :param data: data set (can contain multiple characters)
     :return: True if data is a valid UTF-8 encoding, else return False
     """
-    if len(data) == 0:
-        return False
     i = 0
     while i < len(data):
         try:
