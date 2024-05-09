@@ -8,6 +8,8 @@ def validUTF8(data):
     :param data: data set (can contain multiple characters)
     :return: True if data is a valid UTF-8 encoding, else return False
     """
+    if not data:
+        return False
     i = 0
     while i < len(data):
         if data[i] & 0b11000000 == 0b11000000:
@@ -17,14 +19,14 @@ def validUTF8(data):
                 return False
             i += 2
         elif data[i] & 0b11100000 == 0b11100000:
-            if len(data) <= i + 3 or not (
+            if len(data) < i + 3 or not (
                     data[i + 1] & 0b11000000 == 0b10000000 and
                     data[i + 2] & 0b11000000 == 0b10000000 and
                     data[i + 3] & 0b11000000 == 0b10000000):
                 return False
             i += 3
         elif data[i] & 0b11110000 == 0b11110000:
-            if len(data) <= i + 4 or not (
+            if len(data) < i + 4 or not (
                     data[i + 1] & 0b11000000 == 0b10000000 and
                     data[i + 2] & 0b11000000 == 0b10000000 and
                     data[i + 3] & 0b11000000 == 0b10000000 and
