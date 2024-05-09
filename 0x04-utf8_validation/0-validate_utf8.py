@@ -10,6 +10,9 @@ def validUTF8(data):
     """
     if len(data) == 0:
         return False
+    for i in data:
+        if i <= 0:
+            return False
     i = 0
     while i < len(data):
         if data[i] & 0b11100000 == 0b11000000:
