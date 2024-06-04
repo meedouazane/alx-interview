@@ -11,16 +11,16 @@ def makeChange(coins, total):
     :param total: total amount of money
     :return: number of coins needed
     """
+    if total <= 0:
+        return 0
     count = 0
     i = 0
     coins.sort(reverse=True)
-    if total <= 0:
-        return 0
     while i <= len(coins) - 1:
-        while total > coins[i]:
+        while total >= coins[i]:
             total -= coins[i]
             count += 1
         i += 1
-    if total != 1:
-        return -1
-    return count
+    if total == 0:
+        return count
+    return -1
