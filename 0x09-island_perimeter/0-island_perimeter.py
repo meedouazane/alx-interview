@@ -11,15 +11,19 @@ def island_perimeter(grid):
     :return: the perimeter of the island
     """
     perimeter = 0
-    for i in range(len(grid)):
-        for g in range(len(grid[i])):
+    if not grid:
+        return 0
+    row = len(grid)
+    col = len(grid[0])
+    for i in range(row):
+        for g in range(col):
             if grid[i][g] == 1:
-                if grid[i - 1][g] == 0 or i == 0:
+                if grid[i - 1][g] == 0:
                     perimeter += 1
-                if grid[i + 1][g] == 0 or i == len(grid) - 1:
+                if grid[i + 1][g] == 0:
                     perimeter += 1
-                if grid[i][g - 1] == 0 or g == 0:
+                if grid[i][g - 1] == 0:
                     perimeter += 1
-                if grid[i][g + 1] == 0 or g == len(grid[i]) - 1:
+                if grid[i][g + 1] == 0:
                     perimeter += 1
     return perimeter
