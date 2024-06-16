@@ -4,15 +4,23 @@ Prime Game
 """
 
 
-def isPrime(x):
+def isPrime(n):
     """
-    verify if number is prime or not
-    :param x: number
-    :return: True if x is prime, False if not
+    Check if a number is prime.
+    :param n: number
+    :return: True if n is prime, False otherwise
     """
-    for i in range(2, x - 1):
-        if x % i == 0:
+    if n <= 1:
+        return False
+    if n <= 3:
+        return True
+    if n % 2 == 0 or n % 3 == 0:
+        return False
+    i = 5
+    while i * i <= n:
+        if n % i == 0 or n % (i + 2) == 0:
             return False
+        i += 6
     return True
 
 
