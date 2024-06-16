@@ -3,7 +3,6 @@
 Prime Game
 """
 
-
 def isPrime(n):
     """
     Check if a number is prime.
@@ -23,46 +22,48 @@ def isPrime(n):
         i += 6
     return True
 
-
-def isMultiples(num, x):
+def countPrimes(n):
     """
-    verify if number is Multiples or not
-    :param x: number
-    :return: True if x is Multiples, False if not
+    Count the number of prime numbers up to and including n.
+    :param n: number
+    :return: number of primes <= n
     """
-    if num % x == 0:
-        return True
-    return False
-
+    if n < 2:
+        return 0
+    sieve = [True] * (n + 1)
+    sieve[0] = sieve[1] = False
+    p = 2
+    while (p * p <= n):
+        if (sieve[p] == True):
+            for i in range(p * p, n + 1, p):
+                sieve[i] = False
+        p += 1
+    return sum(sieve)
 
 def isWinner(x, nums):
     """
-    Determine who the winner of each game.
-    :param x: rounds
-    :param nums: set of numbers
-    :return: name of the player that won the most rounds
+    Determine who the winner of each game is.
+    :param x: number of rounds
+    :param nums: list of integers representing the set of numbers for each round
+    :return: name of the player that won the most rounds or None if it's a tie
     """
-    win = 0
-    Ben = 0
-    Maria = 0
-    for i in nums:
-        setNums = []
-        setNums = [n for n in range(1, i + 1)]
-        for k in setNums:
-            if isPrime(k):
-                num = k
-                setNums.remove(k)
-                win += 1
-                for m in setNums:
-                    if isMultiples(num, m):
-                        setNums.remove(m)
-        if win % 2 != 0:
-            Ben += 1
+    if not nums or x <= 0:
+        return None
+    
+    Maria_wins = 0
+    Ben_wins = 0
+    
+    for num in nums:
+        primes_count = countPrimes(num)
+        if primes_count % 2 == 1:
+            Maria_wins += 1
         else:
-            Maria += 1
-    if Ben > Maria:
-        return 'Ben'
-    elif Maria > Ben:
-        return 'Maria'
+            Ben_wins += 1
+    
+    if Maria_wins > Ben_wins:
+        return "Maria"
+    elif Ben_wins > Maria_wins:
+        return "Ben"
     else:
         return None
+
